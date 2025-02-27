@@ -1,0 +1,24 @@
+<Solution>
+<Folder Name="/Solution Items/">
+<File Path=".editorconfig" />
+<File Path="Directory.Build.props" />
+<File Path="Directory.Packages.props" />
+</Folder>
+<Folder Name="/shared/">
+<Project Path="shared/DTOs/DTOs.csproj"  />
+<Project Path="shared/Enums/Enums.csproj" />
+</Folder>
+<Folder Name="/ChatApp.Aspire/">
+<Project Path="ChatApp.Aspire/ChatApp.Aspire.Apphost/ChatApp.Aspire.Apphost.csproj"  />
+<Project Path="ChatApp.Aspire/ChatApp.Aspire.ServiceDefaults/ChatApp.Aspire.ServiceDefaults.csproj" />
+</Folder>
+<Folder Name="/Gateway/">
+<Project Path="Gateway/Application/Application.csproj" />
+<Project Path="Gateway/Domain/Domain.csproj" />
+<Project Path="Gateway/Gateway.Api/Gateway.Api.csproj" />
+<Project Path="Gateway/Infrastructure/Infrastructure.csproj" />
+</Folder>
+<Project Path="docker-compose.dcproj">
+<Build />
+</Project>
+</Solution>

@@ -1,9 +1,12 @@
+using Application.Encryption;
 using Application.UserManager;
 using Infrastructure.db;
 using Infrastructure.UserRepository;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+builder.Services.AddSingleton<IConfiguration>(configuration);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -44,17 +47,31 @@ void buildInfrastructure(WebApplicationBuilder builder)
     ArgumentNullException.ThrowIfNullOrWhiteSpace(connectionString);
     builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
     new NpgsqlDbConnectionFactory(connectionString));
+    builder.Services.AddScoped<IUserRepository, DbUserRepository>();
+
 
 }
 
 void buildApplication(WebApplicationBuilder builder)
 {
-    builder.Services.AddScoped<IUserRepository, DbUserRepository>();
+
+    builder.Services.AddScoped<IPasswordEncryption, SaltAndPepperEncryption>(provider =>
+    {
+        var pepperLetters = configuration.GetValue<string>("pepperLetters");
+        ArgumentNullException.ThrowIfNull(pepperLetters);
+        var pepperLength = configuration.GetValue<int>("pepperLength");
+        if (pepperLength < 0)
+        {
+            throw new ArgumentOutOfRangeException(null, "The pepper length number cannot be less than 0.");
+        }
+        return new SaltAndPepperEncryption(pepperLetters, pepperLength);
+    });
+    builder.Services.AddScoped<IUserManager, UserRepositoryManager>();
+
 }
 
 void buildApiLevel(WebApplicationBuilder builder)
 {
-    builder.Services.AddScoped<IUserManager, SaltAndPepperUserManager>();
     builder.Services.AddControllers();
 
 }

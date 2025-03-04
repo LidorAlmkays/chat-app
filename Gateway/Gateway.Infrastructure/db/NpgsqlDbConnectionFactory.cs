@@ -1,5 +1,4 @@
 using Domain.Exceptions;
-using Microsoft.Extensions.Logging;
 using Npgsql;
 using System.Data;
 

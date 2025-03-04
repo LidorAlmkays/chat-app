@@ -11,9 +11,9 @@
     <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Gateway.Application\Gateway.Application.csproj" />
+    <ProjectReference Include="..\Gateway.Infrastructure\Gateway.Infrastructure.csproj" />
+    <ProjectReference Include="..\Gateway.Domain\Gateway.Domain.csproj" />
 
   </ItemGroup>
 </Project>

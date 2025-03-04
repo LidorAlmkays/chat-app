@@ -6,6 +6,7 @@ CREATE TABLE user_data(
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL,
+    password_key VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 COMMENT ON TABLE user_data IS '';

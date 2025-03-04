@@ -13,12 +13,16 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Directory.Packages.props", "."]
+COPY ["shared/Directory.Packages.props", "shared/"]
+COPY ["ChatApp.Aspire/Directory.Packages.props", "ChatApp.Aspire/"]
 COPY ["Directory.Build.props", "."]
 COPY ["Gateway/Gateway.Api/Gateway.Api.csproj", "Gateway/Gateway.Api/"]
-COPY ["ChatApp.Aspire.ServiceDefaults/ChatApp.Aspire.ServiceDefaults.csproj", "ChatApp.Aspire.ServiceDefaults/"]
-COPY ["Gateway/Application/Application.csproj", "Gateway/Application/"]
-COPY ["Gateway/Domain/Domain.csproj", "Gateway/Domain/"]
-COPY ["Gateway/Infrastructure/Infrastructure.csproj", "Gateway/Infrastructure/"]
+COPY ["shared/DTOs/DTOs.csproj", "shared/DTOs/"]
+COPY ["shared/Enums/Enums.csproj", "shared/Enums/"]
+COPY ["ChatApp.Aspire/ChatApp.Aspire.ServiceDefaults/ChatApp.Aspire.ServiceDefaults.csproj", "ChatApp.Aspire/ChatApp.Aspire.ServiceDefaults/"]
+COPY ["Gateway/Gateway.Application/Gateway.Application.csproj", "Gateway/Gateway.Application/"]
+COPY ["Gateway/Gateway.Domain/Gateway.Domain.csproj", "Gateway/Gateway.Domain/"]
+COPY ["Gateway/Gateway.Infrastructure/Gateway.Infrastructure.csproj", "Gateway/Gateway.Infrastructure/"]
 RUN dotnet restore "./Gateway/Gateway.Api/Gateway.Api.csproj"
 COPY . .
 WORKDIR "/src/Gateway/Gateway.Api"

@@ -15,7 +15,8 @@ namespace Application.mapping
                 Age = userDTO.Age,
                 Email = userDTO.Email,
                 Password = userDTO.Password,
-                Role = nameof(Role.User)
+                Role = nameof(Role.User),
+                PasswordKey = ""
             };
         }
     }

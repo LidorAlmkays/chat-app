@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"  />
+    <PackageReference Include="xunit"  />
+    <PackageReference Include="xunit.runner.visualstudio"/>
+    <ProjectReference Include="..\Gateway.Infrastructure\Gateway.Infrastructure.csproj" />
+    <ProjectReference Include="..\Gateway.Application\Gateway.Application.csproj" />
+    <ProjectReference Include="..\Gateway.Domain\Gateway.Domain.csproj" />
+    <ProjectReference Include="..\Gateway.Api\Gateway.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

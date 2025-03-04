@@ -37,12 +37,12 @@ namespace Gateway.Api.controllers
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
-            catch (UsernameTakenException)
+            catch (UserEmailTakenException)
             {
-                _logger.LogWarning("User tried to register with a used username");
+                _logger.LogWarning("User tried to register with a used email");
                 return Problem(
                     type: "Bad Request",
-                    title: "Failed to create user, because username is taken.",
+                    title: "Failed to create user, because email is taken.",
                     statusCode: StatusCodes.Status400BadRequest
                 );
             }

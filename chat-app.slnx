@@ -13,10 +13,11 @@
 <Project Path="ChatApp.Aspire/ChatApp.Aspire.ServiceDefaults/ChatApp.Aspire.ServiceDefaults.csproj" />
 </Folder>
 <Folder Name="/Gateway/">
-<Project Path="Gateway/Application/Application.csproj" />
-<Project Path="Gateway/Domain/Domain.csproj" />
+<Project Path="Gateway/Gateway.Application/Gateway.Application.csproj" />
+<Project Path="Gateway/Gateway.Tests/Gateway.Tests.csproj" />
+<Project Path="Gateway/Gateway.Domain/Gateway.Domain.csproj" />
 <Project Path="Gateway/Gateway.Api/Gateway.Api.csproj" />
-<Project Path="Gateway/Infrastructure/Infrastructure.csproj" />
+<Project Path="Gateway/Gateway.Infrastructure/Gateway.Infrastructure.csproj" />
 </Folder>
 <Project Path="docker-compose.dcproj">
 <Build />

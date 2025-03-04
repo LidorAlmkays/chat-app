@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Gateway.Domain\Gateway.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" />

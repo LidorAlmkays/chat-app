@@ -2,8 +2,7 @@ using Application.Encryption;
 using Application.mapping;
 using Domain.models;
 using DTOs;
-using Enums;
-using Infrastructure.UserRepository;
+using Gateway.Infrastructure.UserRepository;
 
 namespace Application.UserManager
 {
@@ -17,6 +16,11 @@ namespace Application.UserManager
             UserModel userModel = user.ToUserModel();
             (userModel.Password, userModel.PasswordKey) = _passwordEncryption.EncryptionPassword(userModel.Password);
             return _userRepository.InsertUser(userModel);
+        }
+
+        public Task<bool> DeleteUserByEmailAsync(string userEmail)
+        {
+            return _userRepository.DeleteUserByEmail(userEmail);
         }
     }
 }

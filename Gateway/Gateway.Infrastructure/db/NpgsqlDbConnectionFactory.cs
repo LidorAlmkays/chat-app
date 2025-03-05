@@ -2,7 +2,7 @@ using Domain.Exceptions;
 using Npgsql;
 using System.Data;
 
-namespace Infrastructure.db
+namespace Gateway.Infrastructure.db
 {
     public class NpgsqlDbConnectionFactory(string connectionString) : IDbConnectionFactory
     {

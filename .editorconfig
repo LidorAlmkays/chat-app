@@ -248,3 +248,5 @@ dotnet_diagnostic.CA1848.severity = none
 dotnet_diagnostic.CA2000.severity = none
 dotnet_diagnostic.CA1724.severity = none
 dotnet_diagnostic.CA1515.severity = none
+dotnet_diagnostic.CA2254.severity = none
+dotnet_diagnostic.CA1031.severity = none

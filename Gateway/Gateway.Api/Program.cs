@@ -1,7 +1,7 @@
 using Application.Encryption;
 using Application.UserManager;
-using Infrastructure.db;
-using Infrastructure.UserRepository;
+using Gateway.Infrastructure.db;
+using Gateway.Infrastructure.UserRepository;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

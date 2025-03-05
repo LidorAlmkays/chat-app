@@ -7,11 +7,11 @@ namespace Domain.Exceptions
         public ConnectionException()
             : base(DefaultPrefix) { }
 
-        public ConnectionException(string message) : base(DefaultPrefix + message)
+        public ConnectionException(string message) : base(DefaultPrefix + ", " + message)
         {
         }
 
-        public ConnectionException(string message, Exception innerException) : base(DefaultPrefix + message, innerException)
+        public ConnectionException(string message, Exception innerException) : base(DefaultPrefix + ", " + message, innerException)
         {
         }
 

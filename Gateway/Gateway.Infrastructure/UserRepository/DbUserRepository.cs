@@ -16,16 +16,8 @@ namespace Gateway.Infrastructure.UserRepository
         {
             ArgumentNullException.ThrowIfNull(userEmail);
             DynamicParameters parameters = new();
-            IDbConnection dbConnection;
-            try
-            {
-                dbConnection = await _dbConnectionFactory.CreateConnectionAsync().ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = "Error when trying to start connection";
-                throw new ConnectionException(errorMessage, ex);
-            }
+            IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
+
             parameters.Add("p_email", userEmail, dbType: DbType.String, direction: ParameterDirection.InputOutput);
             parameters.Add("p_age", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("p_username", dbType: DbType.String, direction: ParameterDirection.Output);
@@ -50,16 +42,7 @@ namespace Gateway.Infrastructure.UserRepository
         {
             ArgumentNullException.ThrowIfNull(user);
             DynamicParameters parameters = new();
-            IDbConnection dbConnection;
-            try
-            {
-                dbConnection = await _dbConnectionFactory.CreateConnectionAsync().ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = "Error when trying to start connection";
-                throw new ConnectionException(errorMessage, ex);
-            }
+            IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
 
             parameters.Add("p_username", user.UserName);
             parameters.Add("p_role", user.Role);
@@ -81,5 +64,22 @@ namespace Gateway.Infrastructure.UserRepository
             }
             return parameters.Get<int>("user_id");
         }
+
+        private async Task<IDbConnection> GetConnection()
+        {
+            IDbConnection dbConnection;
+            try
+            {
+                dbConnection = await _dbConnectionFactory.CreateConnectionAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = "Error when trying to start connection";
+                throw new ConnectionException(errorMessage, ex);
+            }
+            return dbConnection;
+        }
     }
+
+
 }

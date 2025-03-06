@@ -27,6 +27,5 @@ namespace Gateway.Infrastructure.UserRepository
         /// </exception>
         Task<bool> DeleteUserByEmail(string userEmail);
 
-
     }
 }

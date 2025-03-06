@@ -7,7 +7,15 @@ CREATE TABLE user_data(
     password TEXT NOT NULL,
     role TEXT NOT NULL,
     password_key TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 );
-COMMENT ON TABLE user_data IS '';
-COMMENT ON COLUMN user_data.name IS '';
+-- COMMENT ON TABLE user_data IS '';
+-- COMMENT ON COLUMN user_data.name IS '';
+
+ALTER TABLE user_data
+ADD CONSTRAINT valid_email CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+ADD CONSTRAINT check_age CHECK (age >= 18),
+ALTER COLUMN username SET NOT NULL,
+ADD CONSTRAINT valid_role CHECK (role IN ('guest', 'user', 'admin')),
+ADD CONSTRAINT username_not_empty CHECK (username != ''),
+ADD CONSTRAINT check_password_length CHECK (LENGTH(password) >= 8);

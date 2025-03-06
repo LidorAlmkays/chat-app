@@ -1,25 +1,28 @@
 -- Active: 1740481149570@@127.0.0.1@5432@my_chat_app
-DROP PROCEDURE public.create_user_data;
-
 CREATE OR REPLACE PROCEDURE PUBLIC.create_user_data(
-    IN p_email TEXT,
-    IN p_age INTEGER,
-    IN p_username TEXT,
-    IN p_password TEXT,
-    IN p_password_key TEXT,
-    IN p_role TEXT,
-    OUT user_id INT
+    INOUT user_info user_data_model
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    user_id := public.function_create_user_data(p_email, p_age, p_username, p_password,p_password_key, p_role);
-END;
-$$;
+    user_info.role := COALESCE(user_info.role, 'user');
+    user_info.created_at := COALESCE(current_timestamp);
 
+    SELECT public.function_create_user_data(user_info) INTO user_info;
+    RAISE NOTICE 'User Added with email: %', user_info.email;
+ END;
+$$;
+-- DROP PROCEDURE public.create_user_data;
 DO $$ 
-DECLARE result_user_id INT; 
-BEGIN 
-    CALL PUBLIC.create_user_data('johndoe2@example.com', 30, 'JohnDoe', 'hashedpassword', 'userSalt','user', result_user_id);
-    RAISE NOTICE 'User ID: %', result_user_id;
+DECLARE
+    user_info user_data_model; 
+BEGIN
+    user_info.email := 'lidor12@gmail.com';  
+    user_info.age := 30;
+    user_info.username := 'lidor';
+    user_info.password := '12345678';
+    user_info.role := 'admin';
+    user_info.password_key := 'passwordKey';
+
+    CALL PUBLIC.create_user_data(user_info);
 END $$;

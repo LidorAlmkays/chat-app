@@ -1,27 +1,27 @@
 -- Active: 1740481149570@@127.0.0.1@5432@my_chat_app
 CREATE OR REPLACE PROCEDURE PUBLIC.delete_user_by_email(
-    INOUT p_email TEXT,
-    OUT p_age INTEGER,
-    OUT p_username TEXT,
-    OUT p_role TEXT
+    IN p_email TEXT,
+    OUT user_info user_data_model
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    SELECT email, age, username, role
-    INTO p_email, p_age, p_username, p_role
+    SELECT * INTO user_info 
     FROM PUBLIC.function_delete_user_by_email(p_email);
+
+    IF NOT FOUND THEN
+        user_info := NULL;
+    END IF;
+
+    RAISE NOTICE 'Request, delete user by email: % ,Result: %', p_email, row_to_json(user_info);
 END;
 $$;
 
-DROP PROCEDURE delete_user_by_email;
+-- DROP PROCEDURE delete_user_by_email;
 DO $$ 
 DECLARE 
-    p_email TEXT;
-    p_age INTEGER;
-    p_username TEXT;
-    p_role TEXT; 
+    user_info user_data_model;
 BEGIN 
-    CALL PUBLIC.delete_user_by_email('johndoe2@example.com', 30, 'JohnDoe', 'hashedpassword', 'userSalt','user', result_user_id);
-    RAISE NOTICE 'User ID: %', result_user_id;
-END $$;
+    CALL PUBLIC.delete_user_by_email('lidor1@gmail.com',user_info);
+END;
+$$;

@@ -5,9 +5,11 @@ services:
     build:
       context: .
       dockerfile: Gateway/Gateway.Api/Dockerfile
+
   postgres:
     image: postgres
     container_name: postgresDB
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

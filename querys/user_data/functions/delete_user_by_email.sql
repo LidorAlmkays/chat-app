@@ -1,22 +1,24 @@
 -- Active: 1740481149570@@127.0.0.1@5432@my_chat_app
 CREATE OR REPLACE FUNCTION PUBLIC.function_delete_user_by_email(p_email TEXT)
-RETURNS user_data_model
+ RETURNS TABLE(    
+     email TEXT,
+     age INTEGER,
+     username TEXT,
+     role TEXT,
+     id INTEGER
+ ) 
 LANGUAGE plpgsql
 AS $$
-DECLARE
-    deleted_user user_data_model;
 BEGIN 
     DELETE FROM user_data u
     WHERE u.email = p_email
-    RETURNING u.email, u.age, u.username, u.password, u.role, u.password_key, u.created_at 
-    INTO deleted_user;
+    RETURNING u.email, u.age, u.username, u.role, u.id INTO email, age, username, role, id;
 
-    IF NOT FOUND THEN
-        RETURN NULL; -- return null if no user was found
+    -- If no row was deleted, return nothing (empty result set)
+    IF email IS NULL THEN
+        RETURN;
     END IF;
-
-    RETURN deleted_user;
-
+    RETURN NEXT;
 END;
 $$;
 -- DROP FUNCTION IF EXISTS PUBLIC.function_delete_user_by_email;

@@ -26,6 +26,8 @@ public static class Extensions
 
         builder.Services.AddServiceDiscovery();
 
+        builder.Services.AddLogging();
+
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
             // Turn on resilience by default

@@ -8,7 +8,7 @@ services:
 
   postgres:
     image: postgres
-    container_name: postgresDB
+    container_name: postgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
@@ -23,5 +23,19 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    
+ 
+  pgadmin:
+    container_name: pgadmin
+    image: 'docker.io/dpage/pgadmin4:latest'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "postgres@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
+    ports:
+      - 15080:80
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin/
+      
 volumes:
   postgres-vol:
+  pgadmin-data:

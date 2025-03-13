@@ -1,6 +1,6 @@
 using Application.Encryption;
 using Application.mapping;
-using Domain.models;
+using Gateway.Domain.models;
 using DTOs;
 using Gateway.Infrastructure.UserRepository;
 
@@ -11,11 +11,12 @@ namespace Application.UserManager
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IPasswordEncryption _passwordEncryption = passwordEncryption;
 
-        public Task<int> AddUserAsync(RequestCreateUserDTO user)
+        public async Task<Guid> AddUserAsync(RequestCreateUserDTO user)
         {
-            UserModel userModel = user.ToUserModel();
+            UserModel userModel = user.ToUserModelAsUser();
             (userModel.Password, userModel.PasswordKey) = _passwordEncryption.EncryptionPassword(userModel.Password);
-            return _userRepository.InsertUser(userModel);
+            var userId = await _userRepository.InsertUser(userModel).ConfigureAwait(false);
+            return userId;
         }
 
         public Task<bool> DeleteUserByEmailAsync(string userEmail)

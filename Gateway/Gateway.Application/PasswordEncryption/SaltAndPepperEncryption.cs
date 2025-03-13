@@ -9,20 +9,6 @@ namespace Application.Encryption
         private readonly string _pepperLetters;
         private readonly int _pepperLength;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SaltAndPepperEncryption"/> class.
-        /// This constructor initializes the encryption configuration with specified pepper value,
-        /// along with the respective length. It validates the inputs to ensure the pepper string
-        /// is not null and that the length is non-negative.
-        /// </summary>
-        /// <param name="pepperLetters">The pepper letters used for encryption. Cannot be null.</param>
-        /// <param name="pepperLength">The length of the pepper letters. Must be non-negative.</param>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown when <paramref name="pepperLetters"/> is null.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when <paramref name="pepperLength"/> is less than 0.
-        /// </exception>
         public SaltAndPepperEncryption(string pepperLetters, int pepperLength)
         {
             _pepperLetters = pepperLetters;
@@ -37,14 +23,26 @@ namespace Application.Encryption
             return (encryptedPassword, Convert.ToBase64String(generatedSalt));
         }
 
-        public bool CheckPasswordValid(string passwordToCheck, string encryptedPassword, string passwordKey)
+        public bool CheckPasswordValid(string? password, string? encryptedPassword, string? encryptionKey)
         {
-            byte[] salt = Convert.FromBase64String(passwordKey);
+            if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(encryptedPassword) || string.IsNullOrEmpty(encryptionKey))
+            {
+                return false;
+            }
+            byte[] salt;
+            try
+            {
+                salt = Convert.FromBase64String(encryptionKey);
+            }
+            catch (FormatException)
+            {
+                return false; // If decryption fails due to a malformed encryption key
+            }
             for (int i = 0; i < Math.Pow(_pepperLetters.Length, _pepperLength); i++)
             {
                 int[] currentPepper = ConvertToPepperArray(i);
                 var pepper = ConvertIndexArrayToPepperWord(currentPepper);
-                var currentEncryptedPassword = HashPassword(passwordToCheck + pepper, salt);
+                var currentEncryptedPassword = HashPassword(password + pepper, salt);
                 if (encryptedPassword == currentEncryptedPassword)
                 {
                     return true;

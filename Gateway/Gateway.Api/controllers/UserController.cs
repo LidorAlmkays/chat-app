@@ -2,6 +2,7 @@ using Application.UserManager;
 using Domain.Exceptions;
 using DTOs;
 using Gateway.Domain.Exceptions;
+using Gateway.Domain.Exceptions.database;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gateway.Api.controllers
@@ -19,38 +20,55 @@ namespace Gateway.Api.controllers
             try
             {
                 ArgumentNullException.ThrowIfNull(userCreationData);
-                _logger.Log(LogLevel.Information, "Adding user: " + userCreationData.ToString());
-                int userId = await _userManager.AddUserAsync(userCreationData).ConfigureAwait(false);
+                _logger.LogInformation("Adding user with the following data: {@UserData}", userCreationData);
+
+                Guid userId = await _userManager.AddUserAsync(userCreationData).ConfigureAwait(false);
                 return Ok(new ResponseCreateUserDTO { Id = userId });
             }
             catch (ArgumentNullException)
             {
-                _logger.LogWarning("Caller tried to create user without any user data");
+                _logger.LogWarning("Caller tried to create a user without providing any user data.");
                 return Problem(
                     type: "Bad Request",
-                    title: "Failed to create user, no user data was givin",
+                    title: "Failed to create user",
+                    detail: "No user data was provided.",
                     statusCode: StatusCodes.Status400BadRequest
+                );
+            }
+            catch (ConstraintViolationException ex)
+            {
+                _logger.LogWarning("User creation failed due to constraint violation: {ConstraintType}", ex.ConstraintType);
+
+                return Problem(
+                    type: "Unprocessable Entity",
+                    title: "Failed to create user due to business rule violation",
+                    detail: ex.Message,
+                    statusCode: StatusCodes.Status422UnprocessableEntity
                 );
             }
             catch (ConnectionException ex)
             {
-                _logger.LogError("User tried to register, and failed because of connection, Error: {Exception}", ex);
+                _logger.LogError("User creation failed due to database connection error: {Exception}", ex);
 
                 return Problem(
                     type: "Internal Server Error",
                     title: "Failed to create user",
+                    detail: "A database connection error occurred. Please try again later.",
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
-            catch (CreateUserEmailTakenException)
+            catch (Exception ex)
             {
-                _logger.LogWarning("User tried to register with a used email");
+                _logger.LogError("Unexpected error occurred while creating user: {Exception}", ex);
+
                 return Problem(
-                    type: "Bad Request",
-                    title: "Failed Email is taken",
-                    statusCode: StatusCodes.Status400BadRequest
+                    type: "Internal Server Error",
+                    title: "Unexpected error occurred",
+                    detail: "An unexpected error occurred while processing your request. Please try again later.",
+                    statusCode: StatusCodes.Status500InternalServerError
                 );
             }
+
         }
 
         [HttpDelete]

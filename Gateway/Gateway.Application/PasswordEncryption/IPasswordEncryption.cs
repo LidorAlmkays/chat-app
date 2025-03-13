@@ -6,7 +6,7 @@ namespace Application.Encryption
 {
     public interface IPasswordEncryption
     {
-        bool CheckPasswordValid(string passwordToCheck, string encryptedPassword, string passwordKey);
+        bool CheckPasswordValid(string? password, string? encryptedPassword, string? encryptionKey);
         (string encryptedPassword, string encryptionKey) EncryptionPassword(string password);
     }
 }

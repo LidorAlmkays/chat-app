@@ -1,4 +1,5 @@
 using Domain.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Data;
 

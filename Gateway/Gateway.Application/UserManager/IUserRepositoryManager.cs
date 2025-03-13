@@ -1,5 +1,5 @@
 using DTOs;
-namespace Application.UserManager
+namespace Gateway.Application.UserManager
 {
     public interface IUserManager
     {
@@ -26,7 +26,7 @@ namespace Application.UserManager
         /// </list>
         /// </exception>
         /// <exception cref="Exception">Thrown when an unexpected error occurs during the insertion process.</exception>
-        Task<Guid> AddUserAsync(RequestCreateUserDTO user);
+        Task<ResponseCreateUserDTO> AddUserAsync(RequestCreateUserDTO user);
         /// <summary>
         /// Asynchronously deletes a user by their email from an external source (e.g., database, file, etc.).
         /// </summary>

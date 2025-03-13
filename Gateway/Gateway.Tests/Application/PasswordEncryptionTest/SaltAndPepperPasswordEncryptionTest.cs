@@ -1,4 +1,4 @@
-using Application.Encryption;
+using Gateway.Application.Encryption;
 
 namespace Gateway.Tests.Application.PasswordEncryptionTest
 {

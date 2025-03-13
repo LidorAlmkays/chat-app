@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
-namespace Application.Encryption
+namespace Gateway.Application.Encryption
 {
     public class SaltAndPepperEncryption : IPasswordEncryption
     {

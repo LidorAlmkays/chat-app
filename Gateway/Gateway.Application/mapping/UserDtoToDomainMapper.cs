@@ -2,7 +2,7 @@ using Gateway.Domain.models;
 using DTOs;
 using Enums;
 
-namespace Application.mapping
+namespace Gateway.Application.mapping
 {
     public static class UserDtoToDomainMapper
     {

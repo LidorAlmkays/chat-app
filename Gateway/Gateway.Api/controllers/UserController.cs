@@ -1,4 +1,4 @@
-using Application.UserManager;
+using Gateway.Application.UserManager;
 using Domain.Exceptions;
 using DTOs;
 using Gateway.Domain.Exceptions;
@@ -22,8 +22,8 @@ namespace Gateway.Api.controllers
                 ArgumentNullException.ThrowIfNull(userCreationData);
                 _logger.LogInformation("Adding user with the following data: {@UserData}", userCreationData);
 
-                Guid userId = await _userManager.AddUserAsync(userCreationData).ConfigureAwait(false);
-                return Ok(new ResponseCreateUserDTO { Id = userId });
+                ResponseCreateUserDTO result = await _userManager.AddUserAsync(userCreationData).ConfigureAwait(false);
+                return Ok(result);
             }
             catch (ArgumentNullException)
             {

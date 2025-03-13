@@ -1,15 +1,11 @@
-using Application.Encryption;
-using Application.mapping;
-using Application.UserManager;
+using Gateway.Application.Encryption;
+using Gateway.Application.mapping;
+using Gateway.Application.UserManager;
 using DTOs;
 using Gateway.Domain.models;
 using Gateway.Infrastructure.UserRepository;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
+
 
 namespace Gateway.Tests.Application.UserManager
 {
@@ -29,7 +25,7 @@ namespace Gateway.Tests.Application.UserManager
         [Fact]
         public async Task AddUserAsync_ShouldEncryptPassword_AndInsertUser()
         {
-            //Arrange
+            // Arrange
             var requestDto = new RequestCreateUserDTO
             {
                 Age = 3,
@@ -37,19 +33,24 @@ namespace Gateway.Tests.Application.UserManager
                 Password = "",
                 Username = ""
             };
+
             var userModel = requestDto.ToUserModelAsUser(); // Convert DTO to Model
             var encryptedPassword = "hashedPassword";
             var passwordKey = "passwordKey";
-            var expectedUserId = Guid.NewGuid();
+            Guid expectedUserId = Guid.NewGuid();
 
+            // Set up mock for password encryption
             _mockPasswordEncryption.Setup(pe => pe.EncryptionPassword(requestDto.Password))
                 .Returns((encryptedPassword, passwordKey));
 
+            // Set up mock for repository insert method
             _mockUserRepository.Setup(repo => repo.InsertUser(It.IsAny<UserModel>()))
                 .ReturnsAsync(expectedUserId);
-            //Act
+
+            // Act
             var result = await _userRepositoryManager.AddUserAsync(requestDto);
-            //Assert
+
+            // Assert
             _mockPasswordEncryption.Verify(pe => pe.EncryptionPassword(requestDto.Password), Times.Once);
 
             _mockUserRepository.Verify(repo => repo.InsertUser(It.Is<UserModel>(u =>
@@ -57,7 +58,10 @@ namespace Gateway.Tests.Application.UserManager
                 u.PasswordKey == passwordKey
             )), Times.Once);
 
-            Assert.Equal(expectedUserId, result);
+            // Assert the returned object is of type ResponseCreateUserDTO and check its Id
+            Assert.IsType<ResponseCreateUserDTO>(result);
+
+            Assert.Equal(expectedUserId, result.Id);
 
         }
     }

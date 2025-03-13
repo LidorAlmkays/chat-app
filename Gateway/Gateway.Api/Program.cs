@@ -1,5 +1,5 @@
-using Application.Encryption;
-using Application.UserManager;
+using Gateway.Application.Encryption;
+using Gateway.Application.UserManager;
 using Gateway.Infrastructure.db;
 using Gateway.Infrastructure.UserRepository;
 using Scalar.AspNetCore;

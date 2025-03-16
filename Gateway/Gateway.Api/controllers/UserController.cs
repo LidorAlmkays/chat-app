@@ -1,8 +1,8 @@
 using Gateway.Application.UserManager;
 using Domain.Exceptions;
-using DTOs;
+using Common.DTOs;
 using Gateway.Domain.Exceptions;
-using Gateway.Domain.Exceptions.database;
+using Gateway.Domain.Exceptions.SpecificConstraint;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gateway.Api.controllers
@@ -72,55 +72,59 @@ namespace Gateway.Api.controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult<bool>> DeleteUserByEmail([FromBody] DeleteUserByEmailDTO userDeleteData)
+        public async Task<ActionResult<ResponseDeleteUserByEmailDTO>> DeleteUserByEmail([FromBody] RequestDeleteUserByEmailDTO userDeleteData)
         {
 
             try
             {
                 ArgumentNullException.ThrowIfNull(userDeleteData);
                 _logger.Log(LogLevel.Information, "Trying to deleting user with email:" + userDeleteData.Email);
-                bool result = await _userManager.DeleteUserByEmailAsync(userDeleteData.Email).ConfigureAwait(false);
-                if (result)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    _logger.LogWarning("Failed to delete user with email: " + userDeleteData.Email);
-                    return Problem(
-                        type: "Bad Request",
-                        title: "User not found",
-                        statusCode: StatusCodes.Status400BadRequest
-                    );
-                }
+                ResponseDeleteUserByEmailDTO result = await _userManager.DeleteUserByEmailAsync(userDeleteData).ConfigureAwait(false);
+
+                return Ok(result);
 
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex) // If email is not provided
             {
-                _logger.LogWarning("Caller tried to delete user by email without giving the email");
+                _logger.LogWarning("Caller tried to delete user by email without providing an email. Exception: {Exception}", ex);
+
                 return Problem(
                     type: "Bad Request",
-                    title: "Failed to delete user, no email givin",
+                    title: "Failed to delete user, no email provided",
+                    detail: "The email field is required to delete a user. Please provide a valid email and try again.",
                     statusCode: StatusCodes.Status400BadRequest
                 );
             }
-            catch (ConnectionException ex)
+            catch (UserNotFoundException ex) // If the user was not found
             {
-                _logger.LogError("Failed to delete user, because of connection, Error: {Exception}", ex);
+                _logger.LogWarning("User with email {Email} not found when attempting to delete. Exception: {Exception}", userDeleteData?.Email, ex);
+
+                return Problem(
+                    type: "Not Found",
+                    title: "User not found",
+                    detail: $"No user was found with the email {userDeleteData?.Email}. Please check the email and try again.",
+                    statusCode: StatusCodes.Status404NotFound
+                );
+            }
+            catch (ConnectionException ex) // If there is a connection issue
+            {
+                _logger.LogError("Error when trying to connect to the database: {Exception}", ex);
 
                 return Problem(
                     type: "Internal Server Error",
-                    title: "Failed to delete user by email because connection",
+                    title: "Database connection error",
+                    detail: "A database connection error occurred while trying to delete the user. Please try again later.",
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
-            catch (DeleteUserByEmailException ex)
+            catch (Exception ex) // General exception if something unexpected occurs
             {
-                _logger.LogError("Failed to delete user, because of error with delete request, Error: {Exception}", ex);
+                _logger.LogError("Unexpected error when trying to delete user with email {Email}. Exception: {Exception}", userDeleteData?.Email, ex);
 
                 return Problem(
                     type: "Internal Server Error",
-                    title: "Failed to delete user by email, because delete logic",
+                    title: "Unexpected error",
+                    detail: "An unexpected error occurred while trying to delete the user. Please try again later.",
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }

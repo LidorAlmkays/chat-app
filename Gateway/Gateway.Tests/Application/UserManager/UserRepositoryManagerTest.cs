@@ -1,7 +1,7 @@
 using Gateway.Application.Encryption;
 using Gateway.Application.mapping;
 using Gateway.Application.UserManager;
-using DTOs;
+using Common.DTOs;
 using Gateway.Domain.models;
 using Gateway.Infrastructure.UserRepository;
 using Moq;
@@ -28,7 +28,7 @@ namespace Gateway.Tests.Application.UserManager
             // Arrange
             var requestDto = new RequestCreateUserDTO
             {
-                Age = 3,
+                Birthday = 3,
                 Email = "",
                 Password = "",
                 Username = ""

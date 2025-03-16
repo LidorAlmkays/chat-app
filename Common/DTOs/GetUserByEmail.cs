@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DTOs
+namespace Common.DTOs
 {
     public class RequestGetUserByEmailDTO
     {

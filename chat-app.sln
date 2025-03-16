@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{E15E491A-E872-91D8-DF7A-CA59C792F064}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChatApp.Aspire", "ChatApp.Aspire", "{43ED8420-D37D-BBF5-1FD8-878BAFBB0B00}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{E7BDDBC6-9FD1-D1D7-ACD8-2C4F8E3D2461}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{4F52FD11-658E-A102-6CD3-7D7C16FFA15B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatApp.Aspire.Apphost", "ChatApp.Aspire\ChatApp.Aspire.Apphost\ChatApp.Aspire.Apphost.csproj", "{FEB458EF-A4BF-961B-7682-5D316D7E0810}"
 EndProject
@@ -22,16 +22,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.Infrastructure", "G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.Tests", "Gateway\Gateway.Tests\Gateway.Tests.csproj", "{1FFFFE12-2521-CF4A-125E-D4E130AB1B6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOs", "shared\DTOs\DTOs.csproj", "{B1E608D4-9EDC-D8E4-DB45-CB8925C4BEAC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enums", "shared\Enums\Enums.csproj", "{093733B0-F3ED-6277-8468-335E5E84857F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E15E491A-E872-91D8-DF7A-CA59C792F064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E15E491A-E872-91D8-DF7A-CA59C792F064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E15E491A-E872-91D8-DF7A-CA59C792F064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E15E491A-E872-91D8-DF7A-CA59C792F064}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FEB458EF-A4BF-961B-7682-5D316D7E0810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FEB458EF-A4BF-961B-7682-5D316D7E0810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEB458EF-A4BF-961B-7682-5D316D7E0810}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,14 +60,6 @@ Global
 		{1FFFFE12-2521-CF4A-125E-D4E130AB1B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FFFFE12-2521-CF4A-125E-D4E130AB1B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FFFFE12-2521-CF4A-125E-D4E130AB1B6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1E608D4-9EDC-D8E4-DB45-CB8925C4BEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1E608D4-9EDC-D8E4-DB45-CB8925C4BEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1E608D4-9EDC-D8E4-DB45-CB8925C4BEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1E608D4-9EDC-D8E4-DB45-CB8925C4BEAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{093733B0-F3ED-6277-8468-335E5E84857F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{093733B0-F3ED-6277-8468-335E5E84857F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{093733B0-F3ED-6277-8468-335E5E84857F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{093733B0-F3ED-6277-8468-335E5E84857F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,10 +72,8 @@ Global
 		{3C5A0D7F-4469-2B33-27E3-9BB14589CA32} = {E7BDDBC6-9FD1-D1D7-ACD8-2C4F8E3D2461}
 		{1728C22A-A8DE-4A6C-6174-7DF3A1162741} = {E7BDDBC6-9FD1-D1D7-ACD8-2C4F8E3D2461}
 		{1FFFFE12-2521-CF4A-125E-D4E130AB1B6F} = {E7BDDBC6-9FD1-D1D7-ACD8-2C4F8E3D2461}
-		{B1E608D4-9EDC-D8E4-DB45-CB8925C4BEAC} = {4F52FD11-658E-A102-6CD3-7D7C16FFA15B}
-		{093733B0-F3ED-6277-8468-335E5E84857F} = {4F52FD11-658E-A102-6CD3-7D7C16FFA15B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {29A2AE87-630D-40E1-9242-93584B180403}
+		SolutionGuid = {B06CCF69-A7A0-40AA-8FE2-1FB5B682C04A}
 	EndGlobalSection
 EndGlobal

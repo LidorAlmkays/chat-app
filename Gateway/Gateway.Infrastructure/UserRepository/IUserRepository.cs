@@ -42,7 +42,7 @@ namespace Gateway.Infrastructure.UserRepository
         /// <exception cref="DeleteUserByEmailException">
         /// Thrown when user deletion fails due to business rules or database constraints.
         /// </exception>
-        Task<bool> DeleteUserByEmail(string userEmail);
+        Task<UserModel> DeleteUserByEmail(string userEmail);
 
     }
 }

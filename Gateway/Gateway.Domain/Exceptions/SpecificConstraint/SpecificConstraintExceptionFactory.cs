@@ -1,14 +1,14 @@
 using System.Data.Common;
 using System.Text.RegularExpressions;
 
-namespace Gateway.Domain.Exceptions.database
+namespace Gateway.Domain.Exceptions.SpecificConstraint
 {
     public static class SpecificConstraintExceptionFactory
     {
         private static readonly Dictionary<ConstraintType, string> errorMessages = new()
         {
             { ConstraintType.ValidEmail, "Invalid email format. Please provide a valid email address." },
-            { ConstraintType.CheckAge, "Age must be 18 or older." },
+            { ConstraintType.CheckBirthday, "Age must be older." },
             { ConstraintType.ValidRole, "Invalid role. Allowed roles: Guest, User, Admin." },
             { ConstraintType.UsernameNotEmpty, "Username cannot be empty." },
             { ConstraintType.UsernameNotNull, "Username is required and cannot be null." },
@@ -40,7 +40,7 @@ namespace Gateway.Domain.Exceptions.database
             var mapping = new Dictionary<string, ConstraintType>(StringComparer.OrdinalIgnoreCase)
     {
         { "valid_email", ConstraintType.ValidEmail },
-        { "check_age", ConstraintType.CheckAge },
+        { "check_birthday", ConstraintType.CheckBirthday },
         { "valid_role", ConstraintType.ValidRole },
         { "username_not_empty", ConstraintType.UsernameNotEmpty },
         { "check_password_length", ConstraintType.CheckPasswordLength },

@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE user_data(  
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     username TEXT,
-    age INTEGER,
+    birthday DATE,
     email TEXT,
     password TEXT,
     role TEXT,
@@ -13,16 +13,17 @@ CREATE TABLE user_data(
 );
 ALTER TABLE user_data
 ADD CONSTRAINT valid_email CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
-ADD CONSTRAINT check_age CHECK (age >= 18),
+ADD CONSTRAINT check_birthday CHECK (birthday <= CURRENT_DATE - INTERVAL '18 years')
 ADD CONSTRAINT valid_role CHECK (role IN ('Guest', 'User', 'Admin')),
 ADD CONSTRAINT username_not_empty CHECK (username != ''),
 ADD CONSTRAINT check_password_length CHECK (LENGTH(password) >= 8),
+ADD CONSTRAINT unique_email UNIQUE (email),
+ALTER COLUMN birthday SET NOT NULL,
 ALTER COLUMN username SET NOT NULL,
 ALTER COLUMN password SET NOT NULL,
 ALTER COLUMN role SET NOT NULL,
 ALTER COLUMN password_key SET NOT NULL,
-ALTER COLUMN email SET NOT NULL,
-ADD CONSTRAINT unique_email UNIQUE (email);
+ALTER COLUMN email SET NOT NULL;
 
 -- ALTER TABLE user_data
 -- DROP CONSTRAINT valid_role;

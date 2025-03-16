@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DTOs
+namespace Common.DTOs
 {
-    public class DeleteUserByEmailDTO
+    public class RequestDeleteUserByEmailDTO
     {
         [Required]
         [EmailAddress]
         public required string Email { get; set; }
+    }
+    public class ResponseDeleteUserByEmailDTO
+    {
     }
 }

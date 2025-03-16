@@ -1,5 +1,6 @@
+using Common.Validators;
 using System.ComponentModel.DataAnnotations;
-namespace DTOs
+namespace Common.DTOs
 {
     public class RequestCreateUserDTO
     {
@@ -7,8 +8,8 @@ namespace DTOs
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters.")]
         public required string Username { get; set; }
 
-        [Range(18, 100, ErrorMessage = "Age must be between 18 and 100.")]
-        public required int Age { get; set; }
+        [AgeRange(18, 100, ErrorMessage = "Birthday must be between 18 and 100.")]
+        public required DateTime Birthday { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
@@ -20,7 +21,7 @@ namespace DTOs
 
         public override string ToString()
         {
-            return $"Username: {Username}, Email: {Email}, Password: {Password}, Age: {Age}";
+            return $"Username: {Username}, Email: {Email}, Password: {Password}, Age: {Birthday}";
         }
     }
 

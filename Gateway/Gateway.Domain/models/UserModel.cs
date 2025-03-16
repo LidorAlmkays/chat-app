@@ -4,11 +4,11 @@ namespace Gateway.Domain.models
     public class UserModel
     {
 
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string Email { get; set; }
 
-        public int Age { get; set; }
+        public DateTime? Birthday { get; set; }
 
         public string Username { get; set; }
 

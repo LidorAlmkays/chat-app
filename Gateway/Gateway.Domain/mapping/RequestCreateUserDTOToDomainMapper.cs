@@ -1,10 +1,10 @@
 using Gateway.Domain.models;
-using DTOs;
-using Enums;
+using Common.DTOs;
+using Common.Enums;
 
-namespace Gateway.Application.mapping
+namespace Gateway.Domain.mapping
 {
-    public static class UserDtoToDomainMapper
+    public static class RequestCreateUserDTOToDomainMapper
     {
         public static UserModel ToUserModelAsUser(this RequestCreateUserDTO userDTO)
         {
@@ -12,7 +12,7 @@ namespace Gateway.Application.mapping
             return new UserModel
             {
                 Username = userDTO.Username,
-                Age = userDTO.Age,
+                Birthday = userDTO.Birthday,
                 Email = userDTO.Email,
                 Password = userDTO.Password,
                 Role = nameof(Role.User),
@@ -25,7 +25,7 @@ namespace Gateway.Application.mapping
             return new UserModel
             {
                 Username = userDTO.Username,
-                Age = userDTO.Age,
+                Birthday = userDTO.Birthday,
                 Email = userDTO.Email,
                 Password = userDTO.Password,
                 Role = nameof(Role.Admin),

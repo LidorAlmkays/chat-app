@@ -1,7 +1,7 @@
 using Gateway.Application.Encryption;
-using Gateway.Application.mapping;
+using Gateway.Domain.mapping;
 using Gateway.Domain.models;
-using DTOs;
+using Common.DTOs;
 using Gateway.Infrastructure.UserRepository;
 
 namespace Gateway.Application.UserManager
@@ -19,9 +19,11 @@ namespace Gateway.Application.UserManager
             return new ResponseCreateUserDTO { Id = userId };
         }
 
-        public Task<bool> DeleteUserByEmailAsync(string userEmail)
+        public async Task<ResponseDeleteUserByEmailDTO> DeleteUserByEmailAsync(RequestDeleteUserByEmailDTO userDeleteData)
         {
-            return _userRepository.DeleteUserByEmail(userEmail);
+            ArgumentNullException.ThrowIfNull(userDeleteData);
+            _ = await _userRepository.DeleteUserByEmail(userDeleteData.Email).ConfigureAwait(false);
+            return new ResponseDeleteUserByEmailDTO { };
         }
     }
 }

@@ -1,4 +1,4 @@
-using DTOs;
+using Common.DTOs;
 namespace Gateway.Application.UserManager
 {
     public interface IUserManager
@@ -42,7 +42,7 @@ namespace Gateway.Application.UserManager
         /// Thrown when user deletion fails due to business rules or constraints specific 
         /// to the external source (e.g., database, file system).
         /// </exception>
-        Task<bool> DeleteUserByEmailAsync(string userEmail);
+        Task<ResponseDeleteUserByEmailDTO> DeleteUserByEmailAsync(RequestDeleteUserByEmailDTO userDeleteData);
 
     }
 }

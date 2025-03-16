@@ -4,9 +4,8 @@
 <File Path="Directory.Build.props" />
 <File Path="Directory.Packages.props" />
 </Folder>
-<Folder Name="/shared/">
-<Project Path="shared/DTOs/DTOs.csproj"  />
-<Project Path="shared/Enums/Enums.csproj" />
+<Folder Name="/Common/">
+<Project Path="Common/Common.csproj"  />
 </Folder>
 <Folder Name="/ChatApp.Aspire/">
 <Project Path="ChatApp.Aspire/ChatApp.Aspire.Apphost/ChatApp.Aspire.Apphost.csproj"  />

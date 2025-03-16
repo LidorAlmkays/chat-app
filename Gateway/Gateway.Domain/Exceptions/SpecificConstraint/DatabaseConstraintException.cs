@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Gateway.Domain.Exceptions.database
+namespace Gateway.Domain.Exceptions.SpecificConstraint
 {
 
     public class ConstraintViolationException : Exception

@@ -1,10 +1,10 @@
-namespace Gateway.Domain.Exceptions.database
+namespace Gateway.Domain.Exceptions.SpecificConstraint
 {
     public enum ConstraintType
     {
 
         ValidEmail,            // Matches: valid_email
-        CheckAge,              // Matches: check_age
+        CheckBirthday,         // Matches: check_birthday
         ValidRole,             // Matches: valid_role
         UsernameNotEmpty,      // Matches: username_not_empty
         CheckPasswordLength,   // Matches: check_password_length

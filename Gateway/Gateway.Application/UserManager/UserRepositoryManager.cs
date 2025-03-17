@@ -22,7 +22,7 @@ namespace Gateway.Application.UserManager
         public async Task<ResponseDeleteUserByEmailDTO> DeleteUserByEmailAsync(RequestDeleteUserByEmailDTO userDeleteData)
         {
             ArgumentNullException.ThrowIfNull(userDeleteData);
-            _ = await _userRepository.DeleteUserByEmail(userDeleteData.Email).ConfigureAwait(false);
+            await _userRepository.DeleteUserByEmail(userDeleteData.Email).ConfigureAwait(false);
             return new ResponseDeleteUserByEmailDTO { };
         }
     }

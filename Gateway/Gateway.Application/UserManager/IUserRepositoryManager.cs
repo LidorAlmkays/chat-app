@@ -30,17 +30,18 @@ namespace Gateway.Application.UserManager
         /// <summary>
         /// Asynchronously deletes a user by their email from an external source (e.g., database, file, etc.).
         /// </summary>
-        /// <param name="userEmail">The email of the user to be deleted.</param>
+        /// <param name="userDeleteData">The request data containing the email of the user to be deleted.</param>
         /// <returns>
-        /// A task that resolves to <c>true</c> if the deletion was successful, 
-        /// otherwise <c>false</c>.
+        /// A task that resolves to a <see cref="ResponseDeleteUserByEmailDTO"/> containing the result of the deletion.
         /// </returns>
-        /// <exception cref="ConnectionException">
-        /// Thrown when there is a failure connecting to the external source.
+        /// <exception cref="UserNotFoundException">
+        /// Thrown when no user is found with the specified email.
         /// </exception>
-        /// <exception cref="DeleteUserByEmailException">
-        /// Thrown when user deletion fails due to business rules or constraints specific 
-        /// to the external source (e.g., database, file system).
+        /// <exception cref="ConnectionException">
+        /// Thrown when there is a failure connecting to the external source (e.g., database).
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Thrown when an unexpected error occurs during user deletion.
         /// </exception>
         Task<ResponseDeleteUserByEmailDTO> DeleteUserByEmailAsync(RequestDeleteUserByEmailDTO userDeleteData);
 

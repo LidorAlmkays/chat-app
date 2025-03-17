@@ -29,20 +29,27 @@ namespace Gateway.Infrastructure.UserRepository
         /// <exception cref="Exception">Thrown when an unexpected error occurs during the insertion process.</exception>
         Task<Guid> InsertUser(UserModel user);
         /// <summary>
-        /// Deletes a user from the database by their email.
+        /// Asynchronously deletes a user from the database by their email address.
         /// </summary>
         /// <param name="userEmail">The email of the user to be deleted.</param>
         /// <returns>
-        /// A task that resolves to <c>true</c> if the deletion was successful 
-        /// and the user was removed, otherwise <c>false</c>.
+        /// A task that resolves to a <see cref="UserModel"/> containing the deleted user's details if the deletion is successful, 
+        /// or throws an exception if the deletion fails.
         /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown when the provided email is null or empty.
+        /// </exception>
+        /// <exception cref="UserNotFoundException">
+        /// Thrown when no user is found with the specified email during the deletion attempt.
+        /// </exception>
         /// <exception cref="ConnectionException">
         /// Thrown when there is a failure connecting to the database.
         /// </exception>
-        /// <exception cref="DeleteUserByEmailException">
-        /// Thrown when user deletion fails due to business rules or database constraints.
+        /// <exception cref="Exception">
+        /// Thrown for any unexpected errors that occur during the deletion process.
         /// </exception>
         Task<UserModel> DeleteUserByEmail(string userEmail);
+
 
     }
 }

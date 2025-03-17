@@ -25,5 +25,12 @@ namespace Gateway.Application.UserManager
             await _userRepository.DeleteUserByEmail(userDeleteData.Email).ConfigureAwait(false);
             return new ResponseDeleteUserByEmailDTO { };
         }
+
+        public async Task<ResponseGetUserByEmailDTO> GetUserByEmailAsync(RequestGetUserByEmailDTO userGetData)
+        {
+            ArgumentNullException.ThrowIfNull(userGetData);
+            var user = await _userRepository.GetUserByEmail(userGetData.Email).ConfigureAwait(false);
+            return user.ToResponseGetUserByEmailDTO();
+        }
     }
 }

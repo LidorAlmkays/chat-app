@@ -47,7 +47,7 @@ namespace Gateway.Infrastructure.UserRepository
                         Id = parameters.Get<Guid>("out_user_id"),
                         PasswordKey = parameters.Get<string>("out_password_key"),
                         Password = parameters.Get<string>("out_password"),
-                        CreatedAt = parameters.Get<DateTime?>("out_created_at") // Nullable DateTime
+                        CreatedAt = parameters.Get<DateTimeOffset?>("out_created_at") // Nullable DateTime
                     };
                 }
                 ArgumentNullException.ThrowIfNull(user);
@@ -63,6 +63,30 @@ namespace Gateway.Infrastructure.UserRepository
             catch (Exception ex)
             {
                 _logger.LogError($"Error when trying to delete user from db, email:{userEmail}, error: " + ex.Message);
+                throw;
+            }
+
+        }
+
+        public async Task<UserModel> GetUserByEmail(string email)
+        {
+            IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
+            DynamicParameters parameters = new();
+            var query = @"SELECT *, created_at AS ""CreatedAt"" FROM function_get_user_by_email(@in_email);";
+            parameters.Add("in_email", email, dbType: DbType.String, direction: ParameterDirection.Input);
+            try
+            {
+                using (dbConnection)
+                {
+                    UserModel user = await dbConnection.QueryFirstOrDefaultAsync<UserModel>(query,
+                    parameters, commandType: CommandType.Text).ConfigureAwait(false)
+                    ?? throw new UserNotFoundException($"User with email '{email}' not found.");
+                    return user;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unexpected error: {ex.Message}");
                 throw;
             }
 

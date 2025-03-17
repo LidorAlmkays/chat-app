@@ -1,7 +1,7 @@
 -- Active: 1740481149570@@127.0.0.1@5432@my_chat_app
 CREATE OR REPLACE PROCEDURE PUBLIC.delete_user_by_email(
     OUT out_birthday DATE,
-    OUT out_created_at DATE,
+    OUT out_created_at TIMESTAMP,
     OUT out_password_key TEXT,
     OUT out_password TEXT,
     OUT out_username TEXT,
@@ -29,7 +29,7 @@ $$;
 DROP PROCEDURE delete_user_by_email;
 DO $$ 
 DECLARE 
-    p_email TEXT='lido2r1@gmail.com';
+    p_email TEXT='john121doe@example.com';
     p_birthday DATE;
     p_username TEXT;
     p_role TEXT; 

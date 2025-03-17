@@ -129,5 +129,14 @@ namespace Gateway.Api.controllers
                 );
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<ResponseGetUserByEmailDTO>> GetUserByEmail([FromQuery] RequestGetUserByEmailDTO userGetData)
+        {
+            ArgumentNullException.ThrowIfNull(userGetData);
+            _logger.Log(LogLevel.Information, "Request to get user with email: " + userGetData.Email);
+            ResponseGetUserByEmailDTO result = await _userManager.GetUserByEmailAsync(userGetData).ConfigureAwait(false);
+            return Ok(result);
+        }
     }
 }

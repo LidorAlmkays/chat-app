@@ -45,5 +45,7 @@ namespace Gateway.Application.UserManager
         /// </exception>
         Task<ResponseDeleteUserByEmailDTO> DeleteUserByEmailAsync(RequestDeleteUserByEmailDTO userDeleteData);
 
+        Task<ResponseGetUserByEmailDTO> GetUserByEmailAsync(RequestGetUserByEmailDTO userGetData);
+
     }
 }

@@ -50,6 +50,7 @@ namespace Gateway.Infrastructure.UserRepository
         /// </exception>
         Task<UserModel> DeleteUserByEmail(string userEmail);
 
+        Task<UserModel> GetUserByEmail(string email);
 
     }
 }

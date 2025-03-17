@@ -18,6 +18,6 @@ namespace Gateway.Domain.models
 
         public string PasswordKey { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
     }
 }

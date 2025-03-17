@@ -18,8 +18,8 @@ $$;
 -- DROP PROCEDURE public.create_user_data;
 DO $$ 
 DECLARE
-    p_email TEXT='john121doe@example.com';
-    p_birthday DATE;
+    p_email TEXT='joh1na121doe@example.com';
+    p_birthday DATE='1992-12-25';
     p_username TEXT='JohnDoe';
     p_password TEXT= 'hashedpass1word';
     p_password_key TEXT='userSalt';

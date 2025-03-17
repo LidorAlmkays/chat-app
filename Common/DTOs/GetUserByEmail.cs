@@ -10,13 +10,20 @@ namespace Common.DTOs
     }
     public class ResponseGetUserByEmailDTO
     {
-        [Required]
-        [StringLength(50, MinimumLength = 3)]
-        public required string UserName { get; set; }
-        [Range(18, 100, ErrorMessage = "Age must be between 18 and 100.")]
-        public required int Age { get; set; }
-        [Required]
-        [EmailAddress]
-        public required string Email { get; set; }
+        public Guid? Id { get; set; }
+
+        public string Email { get; set; }
+
+        public DateTime? Birthday { get; set; }
+
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
+        public string Role { get; set; }
+
+        public string PasswordKey { get; set; }
+
+        public DateTimeOffset? CreatedAt { get; set; }
     }
 }

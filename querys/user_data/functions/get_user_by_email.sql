@@ -1,20 +1,16 @@
--- CREATE OR REPLACE FUNCTION PUBLIC.function_get_user_by_email(p_email TEXT)
--- RETURNS user_data_model
--- LANGUAGE plpgsql
--- AS $$
--- DECLARE 
---     user_record user_data_model;
--- BEGIN
---     SELECT u.username ,u.age ,u.email, u.password, u.password_key, u.role, u.created_at 
---     INTO user_record
---     FROM user_data u  
---     WHERE u.email = p_email;
+CREATE OR REPLACE FUNCTION PUBLIC.function_get_user_by_email(in_email TEXT)
+RETURNS SETOF user_data
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RAISE NOTICE 'Trying to get user with email: %', in_email;
+    RETURN QUERY 
+    SELECT * 
+    FROM user_data  
+    WHERE email = in_email
+    LIMIT 1;
+END;
+$$;
+DROP FUNCTION PUBLIC.function_get_user_by_email;
 
---     IF NOT FOUND THEN
---         RETURN NULL;
---     END IF;
-
---     RETURN user_record;
--- END;
--- $$;
--- SELECT * FROM function_get_user_by_email('johndoe2@example.com');
+SELECT * FROM PUBLIC.function_get_user_by_email('john121doe@example.com');

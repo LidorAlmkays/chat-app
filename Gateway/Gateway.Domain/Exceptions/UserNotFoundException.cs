@@ -12,11 +12,11 @@ namespace Gateway.Domain.Exceptions
         public UserNotFoundException()
             : base(DefaultPrefix) { }
 
-        public UserNotFoundException(string message) : base(DefaultPrefix + ", " + message)
+        public UserNotFoundException(string message) : base(message)
         {
         }
 
-        public UserNotFoundException(string message, Exception innerException) : base(DefaultPrefix + ", " + message, innerException)
+        public UserNotFoundException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

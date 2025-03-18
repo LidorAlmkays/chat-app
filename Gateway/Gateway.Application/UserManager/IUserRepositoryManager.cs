@@ -44,8 +44,17 @@ namespace Gateway.Application.UserManager
         /// Thrown when an unexpected error occurs during user deletion.
         /// </exception>
         Task<ResponseDeleteUserByEmailDTO> DeleteUserByEmailAsync(RequestDeleteUserByEmailDTO userDeleteData);
-
+        /// <summary>
+        /// Retrieves a user by their email address and converts the result into a DTO.
+        /// </summary>
+        /// <param name="userGetData">An object containing the email of the user to retrieve.</param>
+        /// <returns>
+        /// A <see cref="ResponseGetUserByEmailDTO"/> representing the retrieved user.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="userGetData"/> is null.</exception>
+        /// <exception cref="UserNotFoundException">Thrown if no user is found with the specified email.</exception>
+        /// <exception cref="ConnectionException">Thrown if there is an error establishing a database connection.</exception>
+        /// <exception cref="Exception">Thrown if an unexpected error occurs during execution.</exception>
         Task<ResponseGetUserByEmailDTO> GetUserByEmailAsync(RequestGetUserByEmailDTO userGetData);
-
     }
 }

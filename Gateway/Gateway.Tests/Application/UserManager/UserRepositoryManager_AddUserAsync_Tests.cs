@@ -1,28 +1,13 @@
-using Common.DTOs;
-using Domain.Exceptions;
-using Gateway.Application.Encryption;
-using Gateway.Application.UserManager;
-using Gateway.Domain.Exceptions;
 using Gateway.Domain.Exceptions.SpecificConstraint;
-using Gateway.Domain.models;
-using Gateway.Infrastructure.UserRepository;
+using Common.DTOs;
 using Moq;
+using Gateway.Domain.models;
+using Domain.Exceptions;
 
 namespace Gateway.Tests.Application.UserManager
 {
-    public class UserRepositoryManagerTest
+    public class UserRepositoryManager_AddUserAsync_Tests : UserRepositoryManagerBaseTest
     {
-        private readonly Mock<IUserRepository> _mockUserRepository;
-        private readonly Mock<IPasswordEncryption> _mockPasswordEncryption;
-        private readonly UserRepositoryManager _userRepositoryManager;
-
-        public UserRepositoryManagerTest()
-        {
-            _mockUserRepository = new Mock<IUserRepository>();
-            _mockPasswordEncryption = new Mock<IPasswordEncryption>();
-            _userRepositoryManager = new UserRepositoryManager(_mockUserRepository.Object, _mockPasswordEncryption.Object);
-        }
-
         [Fact]
         public async Task AddUserAsync_ShouldEncryptPassword_AndInsertUser()
         {
@@ -157,79 +142,6 @@ namespace Gateway.Tests.Application.UserManager
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _userRepositoryManager.AddUserAsync(requestDto));
         }
-        [Fact]
-        public async Task DeleteUserByEmailAsync_ShouldReturnResponse_WhenDeletionIsSuccessful()
-        {
-            // Arrange
-            var requestDto = new RequestDeleteUserByEmailDTO { Email = "test@example.com" };
 
-            _mockUserRepository
-                .Setup(repo => repo.DeleteUserByEmail(requestDto.Email))
-                .ReturnsAsync(new UserModel()); // Returns a valid user model instead of bool
-
-            // Act
-            var result = await _userRepositoryManager.DeleteUserByEmailAsync(requestDto);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.IsType<ResponseDeleteUserByEmailDTO>(result);
-
-            _mockUserRepository.Verify(repo => repo.DeleteUserByEmail(requestDto.Email), Times.Once);
-        }
-
-        [Fact]
-        public async Task DeleteUserByEmailAsync_ShouldThrowArgumentNullException_WhenRequestIsNull()
-        {
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _userRepositoryManager.DeleteUserByEmailAsync(null!));
-        }
-
-        [Fact]
-        public async Task DeleteUserByEmailAsync_ShouldThrowUserNotFoundException_WhenUserDoesNotExist()
-        {
-            // Arrange
-            var requestDto = new RequestDeleteUserByEmailDTO { Email = "nonexistent@example.com" };
-
-            _mockUserRepository
-                .Setup(repo => repo.DeleteUserByEmail(requestDto.Email))
-                .ThrowsAsync(new UserNotFoundException());
-
-            // Act & Assert
-            var exception = await Assert.ThrowsAsync<UserNotFoundException>(() => _userRepositoryManager.DeleteUserByEmailAsync(requestDto));
-
-            Assert.Equal("User not found inside registry", exception.Message);
-        }
-
-        [Fact]
-        public async Task DeleteUserByEmailAsync_ShouldThrowConnectionException_WhenDatabaseConnectionFails()
-        {
-            // Arrange
-            var requestDto = new RequestDeleteUserByEmailDTO { Email = "test@example.com" };
-
-            _mockUserRepository
-                .Setup(repo => repo.DeleteUserByEmail(requestDto.Email))
-                .ThrowsAsync(new ConnectionException());
-
-            // Act & Assert
-            var exception = await Assert.ThrowsAsync<ConnectionException>(() => _userRepositoryManager.DeleteUserByEmailAsync(requestDto));
-
-            Assert.Equal("Failed to connect to the registry", exception.Message);
-        }
-
-        [Fact]
-        public async Task DeleteUserByEmailAsync_ShouldThrowException_WhenUnexpectedErrorOccurs()
-        {
-            // Arrange
-            var requestDto = new RequestDeleteUserByEmailDTO { Email = "test@example.com" };
-
-            _mockUserRepository
-                .Setup(repo => repo.DeleteUserByEmail(requestDto.Email))
-                .ThrowsAsync(new Exception("Unexpected error"));
-
-            // Act & Assert
-            var exception = await Assert.ThrowsAsync<Exception>(() => _userRepositoryManager.DeleteUserByEmailAsync(requestDto));
-
-            Assert.Equal("Unexpected error", exception.Message);
-        }
     }
 }

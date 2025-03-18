@@ -49,8 +49,16 @@ namespace Gateway.Infrastructure.UserRepository
         /// Thrown for any unexpected errors that occur during the deletion process.
         /// </exception>
         Task<UserModel> DeleteUserByEmail(string userEmail);
-
+        /// <summary>
+        /// Retrieves a user by their email address.
+        /// </summary>
+        /// <param name="email">The email of the user to retrieve.</param>
+        /// <returns>
+        /// A <see cref="UserModel"/> representing the user if found; otherwise, throws a <see cref="UserNotFoundException"/>.
+        /// </returns>
+        /// <exception cref="UserNotFoundException">Thrown if no user is found with the specified email.</exception>
+        /// <exception cref="ConnectionException">Thrown if there is an error establishing a database connection.</exception>
+        /// <exception cref="Exception">Thrown if an unexpected error occurs during execution.</exception>
         Task<UserModel> GetUserByEmail(string email);
-
     }
 }

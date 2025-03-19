@@ -8,11 +8,12 @@ on:
     branches:
       - main
 jobs:
-  tests:
-    runs-on: $"{{matrix.os}}"
-    strategy:
-      matrix:
-        os: [ubuntu-latest,windows-latest,macOS-latest] 
+  build:
+    runs-on: ubuntu-latest
+    # runs-on: $"{{matrix.os}}"
+    # strategy:
+    #   matrix:
+    #     os: [ubuntu-latest,windows-latest,macOS-latest] 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4

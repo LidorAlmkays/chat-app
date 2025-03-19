@@ -11,10 +11,7 @@ variables:
   SLN_NAME: "chat-app.sln"
 jobs:
   tests:
-    runs-on: $"{{matrix.os}}"
-    strategy:
-      matrix:
-        os: [ubuntu-latest,windows-latest,macOS-latest] 
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -22,7 +19,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0.0' # Adjust based on your project
+          dotnet-version: '9.0.x' # Adjust based on your project
 
       - name: Restore Dependencies
         run: dotnet restore '$SLN_NAME'

@@ -7,8 +7,6 @@ on:
   pull_request:
     branches:
       - main
-variables:
-  SLN_NAME: "chat-app.sln"
 jobs:
   tests:
     runs-on: $"{{matrix.os}}"
@@ -25,11 +23,11 @@ jobs:
           dotnet-version: '9.0.0' # Adjust based on your project
 
       - name: Restore Dependencies
-        run: dotnet restore '$SLN_NAME'
+        run: dotnet restore chat-app.sln
       - name: Build Project
-        run: dotnet build '$SLN_NAME' --configuration Release --no-restore
+        run: dotnet build chat-app.sln --configuration Release --no-restore
       - name: Run Unit Tests
-        run:  dotnet test '$SLN_NAME' --no-build --configuration Release --logger trx --results-directory TestResults
+        run:  dotnet test chat-app.sln --no-build --configuration Release --logger trx --results-directory TestResults
       - name: Build Docker Compose
         run: docker-compose -f docker-compose.yml build
 

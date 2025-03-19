@@ -17,7 +17,7 @@ namespace Gateway.Infrastructure.UserRepository
         private readonly ILogger<DbUserRepository> _logger = logger;
         private readonly IDbConnectionFactory _dbConnectionFactory = dbConnectionFactory;
 
-        public async Task<UserModel> DeleteUserByEmail(string userEmail)
+        public async Task<UserModel> DeleteUserByEmailAsync(string userEmail)
         {
             ArgumentNullException.ThrowIfNull(userEmail);
             IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
@@ -68,7 +68,7 @@ namespace Gateway.Infrastructure.UserRepository
 
         }
 
-        public async Task<UserModel> GetUserByEmail(string email)
+        public async Task<UserModel> GetUserByEmailAsync(string email)
         {
             IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
             DynamicParameters parameters = new();
@@ -92,7 +92,7 @@ namespace Gateway.Infrastructure.UserRepository
 
         }
 
-        public async Task<Guid> InsertUser(UserModel user)
+        public async Task<Guid> InsertUserAsync(UserModel user)
         {
             ArgumentNullException.ThrowIfNull(user);
             DynamicParameters parameters = new();
@@ -124,6 +124,39 @@ namespace Gateway.Infrastructure.UserRepository
                 throw;
             }
             return parameters.Get<Guid>("out_user_id");
+        }
+
+        public async Task UpdateByEmailAsync(string email, UpdateUserModel newData)
+        {
+            ArgumentNullException.ThrowIfNull(newData);
+            IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
+            var parameters = new
+            {
+                p_email = email,             // Existing email to identify the user
+                p_new_email = newData.NewEmail,         // If you are not changing the email, you can use user.Email here
+                p_username = newData.Username,       // New username
+                p_birthday = newData.Birthday,       // New birthday
+                p_role = newData.Role,               // New role
+                p_password = newData.Password,       // New password
+                p_password_key = newData.PasswordKey // New password key
+            };
+            try
+            {
+                using (dbConnection)
+                {
+                    await dbConnection.ExecuteAsync("update_user_data_by_email", parameters, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
+                }
+            }
+            catch (DbException ex)
+            {
+                throw SpecificConstraintExceptionFactory.CreateException(ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Unexpected error: {ex.Message}");
+                throw;
+            }
+            return;
         }
 
         private async Task<IDbConnection> GetConnection()

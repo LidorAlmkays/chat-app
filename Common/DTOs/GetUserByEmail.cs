@@ -1,11 +1,13 @@
+using Common.Validators;
 using System.ComponentModel.DataAnnotations;
 
 namespace Common.DTOs
 {
     public class RequestGetUserByEmailDTO
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        [StrictEmail(ErrorMessage = "Invalid email format.")]
         public required string Email { get; set; }
     }
     public class ResponseGetUserByEmailDTO
@@ -25,5 +27,6 @@ namespace Common.DTOs
         public string PasswordKey { get; set; }
 
         public DateTimeOffset? CreatedAt { get; set; }
+        public DateTimeOffset? LastUpdateAt { get; set; }
     }
 }

@@ -111,5 +111,38 @@ namespace Gateway.Api.controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred. Please try again later." });
             }
         }
+
+        [HttpPut]
+        public async Task<ActionResult<ResponseUpdateUserByEmailDTO>> UpdateUserByEmail([FromBody] RequestUpdateUserByEmailDTO userGetData)
+        {
+            try
+            {
+                ArgumentNullException.ThrowIfNull(userGetData);
+                _logger.LogInformation("Request to update user with email: {Email}", userGetData.Email);
+
+                ResponseUpdateUserByEmailDTO result = await _userManager.UpdateUserByEmailAsync(userGetData).ConfigureAwait(false);
+                return Ok(result);
+            }
+            catch (ArgumentNullException)
+            {
+                _logger.LogWarning("Caller tried to update a user without providing any data.");
+                return BadRequest(new { message = "No user data was provided." });
+            }
+            catch (ConstraintViolationException ex)
+            {
+                _logger.LogWarning("User update failed due to constraint violation: {ConstraintType}", ex.ConstraintType);
+                return UnprocessableEntity(new { message = ex.Message });
+            }
+            catch (ConnectionException ex)
+            {
+                _logger.LogError("User update failed due to database connection error: {Exception}", ex);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, new { message = "A database connection error occurred. Please try again later." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Unexpected error occurred while updating user: {Exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "An unexpected error occurred while processing your request. Please try again later." });
+            }
+        }
     }
 }

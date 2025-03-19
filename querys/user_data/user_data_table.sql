@@ -9,6 +9,7 @@ CREATE TABLE user_data(
     password TEXT,
     role TEXT,
     password_key TEXT,
+    last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ALTER TABLE user_data
@@ -31,3 +32,6 @@ ALTER COLUMN email SET NOT NULL;
 
 -- COMMENT ON TABLE user_data IS '';
 -- COMMENT ON COLUMN user_data.name IS '';
+
+-- ALTER TABLE user_data
+-- ADD COLUMN last_updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;

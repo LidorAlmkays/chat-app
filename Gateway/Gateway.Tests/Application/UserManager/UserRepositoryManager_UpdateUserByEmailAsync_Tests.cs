@@ -1,72 +1,66 @@
-using Gateway.Domain.Exceptions.SpecificConstraint;
-using Common.DTOs;
-using Moq;
-using Gateway.Domain.models;
 using Domain.Exceptions;
+using Gateway.Domain.Exceptions.SpecificConstraint;
+using Moq;
+using Common.DTOs;
+using Gateway.Domain.models;
 
 namespace Gateway.Tests.Application.UserManager
 {
-    public class UserRepositoryManager_AddUserAsync_Tests : UserRepositoryManagerBaseTest
+    public class UserRepositoryManager_UpdateUserByEmailAsync_Tests : UserRepositoryManagerBaseTest
     {
         [Fact]
-        public async Task AddUserAsync_ShouldEncryptPassword_AndInsertUser()
+        public async Task UpdateUserByEmailAsync_ShouldEncryptPassword_AndUpdateUser()
         {
             // Arrange
-            var requestDto = new RequestCreateUserDTO
+            var requestDto = new RequestUpdateUserByEmailDTO
             {
-                Birthday = new DateTime(1995, 5, 23),
                 Email = "test@example.com",
                 Password = "password123",
-                Username = "TestUser"
+                Username = "UpdatedUser"
             };
 
             var encryptedPassword = "hashedPassword";
             var passwordKey = "passwordKey";
-            Guid expectedUserId = Guid.NewGuid();
 
             _mockPasswordEncryption
                 .Setup(pe => pe.EncryptionPassword(requestDto.Password))
                 .Returns((encryptedPassword, passwordKey));
 
             _mockUserRepository
-                .Setup(repo => repo.InsertUserAsync(It.IsAny<UserModel>()))
-                .ReturnsAsync(expectedUserId);
+                .Setup(repo => repo.UpdateByEmailAsync(requestDto.Email, It.IsAny<UpdateUserModel>()))
+                .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _userRepositoryManager.AddUserAsync(requestDto);
+            var result = await _userRepositoryManager.UpdateUserByEmailAsync(requestDto);
 
             // Assert
             _mockPasswordEncryption.Verify(pe => pe.EncryptionPassword(requestDto.Password), Times.Once);
-            _mockUserRepository.Verify(repo => repo.InsertUserAsync(It.Is<UserModel>(u =>
-                u.Email == requestDto.Email &&
+            _mockUserRepository.Verify(repo => repo.UpdateByEmailAsync(requestDto.Email, It.Is<UpdateUserModel>(u =>
                 u.Password == encryptedPassword &&
                 u.PasswordKey == passwordKey &&
-                u.Birthday == requestDto.Birthday
+                u.Username == requestDto.Username
             )), Times.Once);
 
             Assert.NotNull(result);
-            Assert.Equal(expectedUserId, result.Id);
         }
 
         [Fact]
-        public async Task AddUserAsync_ShouldThrowArgumentNullException_WhenRequestIsNull()
+        public async Task UpdateUserByEmailAsync_ShouldThrowArgumentNullException_WhenRequestIsNull()
         {
 #pragma warning disable CS8625
-            // Act & Assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _userRepositoryManager.AddUserAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _userRepositoryManager.UpdateUserByEmailAsync(null));
 #pragma warning restore CS8625
         }
 
         [Fact]
-        public async Task AddUserAsync_ShouldThrowConnectionException_WhenDatabaseConnectionFails()
+        public async Task UpdateUserByEmailAsync_ShouldThrowConnectionException_WhenDatabaseConnectionFails()
         {
             // Arrange
-            var requestDto = new RequestCreateUserDTO
+            var requestDto = new RequestUpdateUserByEmailDTO
             {
                 Email = "test@example.com",
                 Password = "password123",
-                Username = "TestUser",
-                Birthday = new DateTime(2000, 1, 1)
+                Username = "UpdatedUser"
             };
 
             _mockPasswordEncryption
@@ -74,12 +68,13 @@ namespace Gateway.Tests.Application.UserManager
                 .Returns(("hashedPassword", "passwordKey"));
 
             _mockUserRepository
-                .Setup(repo => repo.InsertUserAsync(It.IsAny<UserModel>()))
+                .Setup(repo => repo.UpdateByEmailAsync(It.IsAny<string>(), It.IsAny<UpdateUserModel>()))
                 .ThrowsAsync(new ConnectionException("Database connection failed"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<ConnectionException>(() => _userRepositoryManager.AddUserAsync(requestDto));
+            await Assert.ThrowsAsync<ConnectionException>(() => _userRepositoryManager.UpdateUserByEmailAsync(requestDto));
         }
+
         [Theory]
         [InlineData(ConstraintType.ValidEmail, "Invalid email format. Please provide a valid email address.")]
         [InlineData(ConstraintType.CheckBirthday, "Age must be older.")]
@@ -92,15 +87,14 @@ namespace Gateway.Tests.Application.UserManager
         [InlineData(ConstraintType.RoleNotNull, "Role is required and cannot be null.")]
         [InlineData(ConstraintType.PasswordKeyNotNull, "Password key is required and cannot be null.")]
         [InlineData(ConstraintType.EmailNotNull, "Email is required and cannot be null.")]
-        public async Task AddUserAsync_ShouldThrowConstraintViolationException_WhenConstraintFails(ConstraintType constraintType, string expectedMessage)
+        public async Task UpdateUserByEmailAsync_ShouldThrowConstraintViolationException_WhenConstraintFails(ConstraintType constraintType, string expectedMessage)
         {
             // Arrange
-            var requestDto = new RequestCreateUserDTO
+            var requestDto = new RequestUpdateUserByEmailDTO
             {
                 Email = "test@example.com",
                 Password = "password123",
-                Username = "TestUser",
-                Birthday = new DateTime(1998, 7, 15)
+                Username = "UpdatedUser"
             };
 
             _mockPasswordEncryption
@@ -108,27 +102,25 @@ namespace Gateway.Tests.Application.UserManager
                 .Returns(("hashedPassword", "passwordKey"));
 
             _mockUserRepository
-                .Setup(repo => repo.InsertUserAsync(It.IsAny<UserModel>()))
+                .Setup(repo => repo.UpdateByEmailAsync(It.IsAny<string>(), It.IsAny<UpdateUserModel>()))
                 .ThrowsAsync(new ConstraintViolationException(constraintType, expectedMessage));
 
             // Act & Assert
-            var exception = await Assert.ThrowsAsync<ConstraintViolationException>(() => _userRepositoryManager.AddUserAsync(requestDto));
+            var exception = await Assert.ThrowsAsync<ConstraintViolationException>(() => _userRepositoryManager.UpdateUserByEmailAsync(requestDto));
 
             Assert.Equal(constraintType, exception.ConstraintType);
             Assert.Equal(expectedMessage, exception.Message);
         }
 
-
         [Fact]
-        public async Task AddUserAsync_ShouldThrowException_WhenUnexpectedErrorOccurs()
+        public async Task UpdateUserByEmailAsync_ShouldThrowException_WhenUnexpectedErrorOccurs()
         {
             // Arrange
-            var requestDto = new RequestCreateUserDTO
+            var requestDto = new RequestUpdateUserByEmailDTO
             {
                 Email = "test@example.com",
                 Password = "password123",
-                Username = "TestUser",
-                Birthday = new DateTime(1990, 12, 10)
+                Username = "UpdatedUser"
             };
 
             _mockPasswordEncryption
@@ -136,12 +128,11 @@ namespace Gateway.Tests.Application.UserManager
                 .Returns(("hashedPassword", "passwordKey"));
 
             _mockUserRepository
-                .Setup(repo => repo.InsertUserAsync(It.IsAny<UserModel>()))
+                .Setup(repo => repo.UpdateByEmailAsync(It.IsAny<string>(), It.IsAny<UpdateUserModel>()))
                 .ThrowsAsync(new Exception("Unexpected error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _userRepositoryManager.AddUserAsync(requestDto));
+            await Assert.ThrowsAsync<Exception>(() => _userRepositoryManager.UpdateUserByEmailAsync(requestDto));
         }
-
     }
 }

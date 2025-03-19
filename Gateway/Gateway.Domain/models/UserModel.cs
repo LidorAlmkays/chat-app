@@ -19,5 +19,7 @@ namespace Gateway.Domain.models
         public string PasswordKey { get; set; }
 
         public DateTimeOffset? CreatedAt { get; set; }
+        public DateTimeOffset? LastUpdateAt { get; set; }
+
     }
 }

@@ -21,7 +21,8 @@ namespace Gateway.Domain.mapping
                 Role = user.Role,
                 CreatedAt = user.CreatedAt,
                 PasswordKey = user.PasswordKey,
-                Id = user.Id
+                Id = user.Id,
+                LastUpdateAt = user.LastUpdateAt
             };
         }
 

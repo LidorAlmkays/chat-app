@@ -27,7 +27,7 @@ namespace Gateway.Tests.Application.UserManager
             };
 
             _mockUserRepository
-                .Setup(repo => repo.GetUserByEmail(requestDto.Email))
+                .Setup(repo => repo.GetUserByEmailAsync(requestDto.Email))
                 .ReturnsAsync(userModel);
 
             // Act
@@ -38,7 +38,7 @@ namespace Gateway.Tests.Application.UserManager
             Assert.Equal(userModel.Email, result.Email);
             Assert.Equal(userModel.Username, result.Username);
             Assert.Equal(userModel.Birthday, result.Birthday);
-            _mockUserRepository.Verify(repo => repo.GetUserByEmail(requestDto.Email), Times.Once);
+            _mockUserRepository.Verify(repo => repo.GetUserByEmailAsync(requestDto.Email), Times.Once);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace Gateway.Tests.Application.UserManager
             var requestDto = new RequestGetUserByEmailDTO { Email = "nonexistent@example.com" };
 
             _mockUserRepository
-                .Setup(repo => repo.GetUserByEmail(requestDto.Email))
+                .Setup(repo => repo.GetUserByEmailAsync(requestDto.Email))
                 .ThrowsAsync(new UserNotFoundException());
 
             // Act & Assert
@@ -70,7 +70,7 @@ namespace Gateway.Tests.Application.UserManager
             var requestDto = new RequestGetUserByEmailDTO { Email = "test@example.com" };
 
             _mockUserRepository
-                .Setup(repo => repo.GetUserByEmail(requestDto.Email))
+                .Setup(repo => repo.GetUserByEmailAsync(requestDto.Email))
                 .ThrowsAsync(new ConnectionException());
 
             // Act & Assert
@@ -85,7 +85,7 @@ namespace Gateway.Tests.Application.UserManager
             var requestDto = new RequestGetUserByEmailDTO { Email = "test@example.com" };
 
             _mockUserRepository
-                .Setup(repo => repo.GetUserByEmail(requestDto.Email))
+                .Setup(repo => repo.GetUserByEmailAsync(requestDto.Email))
                 .ThrowsAsync(new Exception("Unexpected error"));
 
             // Act & Assert

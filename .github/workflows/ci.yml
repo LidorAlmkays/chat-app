@@ -1,0 +1,35 @@
+name: Test C# project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+variables:
+  SLN_NAME: "chat-app.sln"
+jobs:
+  tests:
+    runs-on: $"{{matrix.os}}"
+    strategy:
+      matrix:
+        os: [ubuntu-latest,windows-latest,macOS-latest] 
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.0' # Adjust based on your project
+
+      - name: Restore Dependencies
+        run: dotnet restore '$SLN_NAME'
+      - name: Build Project
+        run: dotnet build '$SLN_NAME' --configuration Release --no-restore
+      - name: Run Unit Tests
+        run:  dotnet test '$SLN_NAME' --no-build --configuration Release --logger trx --results-directory TestResults
+      - name: Build Docker Compose
+        run: docker-compose -f docker-compose.yml build
+

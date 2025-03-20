@@ -1,4 +1,4 @@
-name: Test C# project
+name: C# ci
 
 on:
   push:

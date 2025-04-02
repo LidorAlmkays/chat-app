@@ -25,16 +25,16 @@ services:
       retries: 5
     
  
-  pgadmin:
-    container_name: pgadmin
-    image: 'docker.io/dpage/pgadmin4:latest'
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "postgres@gmail.com"
-      PGADMIN_DEFAULT_PASSWORD: "postgres"
-    ports:
-      - 15080:80
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin/
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: 'docker.io/dpage/pgadmin4:latest'
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: "postgres@gmail.com"
+  #     PGADMIN_DEFAULT_PASSWORD: "postgres"
+  #   ports:
+  #     - 15080:80
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin/
       
 volumes:
   postgres-vol:

@@ -6,6 +6,9 @@ using Gateway.Infrastructure.UserRepository;
 
 namespace Gateway.Application.UserManager
 {
+
+    //NOTE THIS IS PURE TEST CLASS FOR ADMIN USER IT ISNT FOR NORMAL USERS TO ACCESS AND CALL
+    //AND MOSTLY I WANTED TO LEARN HOW TO WRITE CLEAN CODE
     public class UserRepositoryManager(IUserRepository userRepository, IPasswordEncryption passwordEncryption) : IUserManager
     {
         private readonly IUserRepository _userRepository = userRepository;
@@ -13,7 +16,7 @@ namespace Gateway.Application.UserManager
 
         public async Task<ResponseCreateUserDTO> AddUserAsync(RequestCreateUserDTO user)
         {
-            UserModel userModel = user.ToUserModelAsUser();
+            UserModel userModel = user.ToUserModel();
             (userModel.Password, userModel.PasswordKey) = _passwordEncryption.EncryptionPassword(userModel.Password);
             var userId = await _userRepository.InsertUserAsync(userModel).ConfigureAwait(false);
             return new ResponseCreateUserDTO { Id = userId };

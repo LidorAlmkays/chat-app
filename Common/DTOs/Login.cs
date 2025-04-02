@@ -1,16 +1,14 @@
 using Common.Validators;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace Common.DTOs
 {
-    public record RequestCreateUserDTO
+    public record RequestLoginDTO
     {
-        [Required(ErrorMessage = "Username is required.")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters.")]
-        public required string Username { get; set; }
-
-        [AgeRange(18, 100, ErrorMessage = "Birthday must be between 18 and 100.")]
-        public required DateTime Birthday { get; set; }
-
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         [StrictEmail(ErrorMessage = "Invalid email format.")]
@@ -19,12 +17,10 @@ namespace Common.DTOs
         [Required(ErrorMessage = "Password is required.")]
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
         public required string Password { get; set; }
-        [ValidRole]
-        public string? Role { get; set; }
     }
 
-    public record ResponseCreateUserDTO
+    public record ResponseLoginDTO
     {
-        public required Guid Id { get; set; }
+        public string Token { get; set; }
     }
 }

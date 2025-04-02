@@ -1,7 +1,7 @@
 
 namespace Gateway.Domain.models
 {
-    public class UserModel
+    public record UserModel
     {
 
         public Guid? Id { get; set; }

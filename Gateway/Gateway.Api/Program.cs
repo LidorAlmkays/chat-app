@@ -31,7 +31,7 @@ void main()
     buildApiLevel(builder)?.Run();
 }
 
-void buildInfrastructure(WebApplicationBuilder builder)
+void buildInfrastructure(WebApplicationBuilder builder, ConfigurationManager configuration)
 {
     builder.Services.AddSingleton<IDbConnectionFactory>(provider =>
     {
@@ -42,7 +42,7 @@ void buildInfrastructure(WebApplicationBuilder builder)
     builder.Services.AddScoped<IUserRepository, DbUserRepository>();
 }
 
-void buildApplication(WebApplicationBuilder builder)
+void buildApplication(WebApplicationBuilder builder, ConfigurationManager configuration)
 {
     builder.Services.AddScoped<IPasswordEncryption, SaltAndPepperEncryption>(provider =>
     {
@@ -62,6 +62,7 @@ void buildApplication(WebApplicationBuilder builder)
 
 WebApplication? buildApiLevel(WebApplicationBuilder builder)
 {
+
     builder.Services.AddControllers();
     SetupAuthentication(builder);
 

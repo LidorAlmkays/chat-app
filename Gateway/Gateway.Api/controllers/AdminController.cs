@@ -4,15 +4,19 @@ using Common.DTOs;
 using Gateway.Domain.Exceptions;
 using Gateway.Domain.Exceptions.SpecificConstraint;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace Gateway.Api.controllers
 {
     [ApiController]
+    // [Authorize]
     [Route("[controller]")]
-    public class UserController(ILogger<UserController> logger, IUserManager userManager) : ControllerBase
+    public class AdminController(ILogger<AdminController> logger, IUserManager userManager) : ControllerBase
     {
-        private readonly ILogger<UserController> _logger = logger;
+        private readonly ILogger<AdminController> _logger = logger;
         private readonly IUserManager _userManager = userManager;
+
         [HttpPost]
         public async Task<ActionResult<ResponseCreateUserDTO>> CreateUser([FromBody] RequestCreateUserDTO userCreationData)
         {

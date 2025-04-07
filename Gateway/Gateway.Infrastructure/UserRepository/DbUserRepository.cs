@@ -17,42 +17,25 @@ namespace Gateway.Infrastructure.UserRepository
         private readonly ILogger<DbUserRepository> _logger = logger;
         private readonly IDbConnectionFactory _dbConnectionFactory = dbConnectionFactory;
 
-        public async Task<UserModel> DeleteUserByEmailAsync(string userEmail)
+        public async Task DeleteUserByEmailAsync(string userEmail)
         {
             ArgumentNullException.ThrowIfNull(userEmail);
             IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
             var parameters = new DynamicParameters();
             parameters.Add("in_email", userEmail, dbType: DbType.String, direction: ParameterDirection.Input);
-            parameters.Add("out_birthday", dbType: DbType.Date, direction: ParameterDirection.Output);
-            parameters.Add("out_created_at", dbType: DbType.Date, direction: ParameterDirection.Output);
-            parameters.Add("out_password_key", dbType: DbType.String, direction: ParameterDirection.Output);
-            parameters.Add("out_password", dbType: DbType.String, direction: ParameterDirection.Output);
-            parameters.Add("out_username", dbType: DbType.String, direction: ParameterDirection.Output);
-            parameters.Add("out_role", dbType: DbType.String, direction: ParameterDirection.Output);
-            parameters.Add("out_email", dbType: DbType.String, direction: ParameterDirection.Output);
-            parameters.Add("out_user_id", dbType: DbType.Guid, direction: ParameterDirection.Output);
+            parameters.Add("out_is_deleted", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+
 
             try
             {
-                UserModel? user;
+                int userFound = 0;
                 using (dbConnection)
                 {
-                    await dbConnection.QueryFirstOrDefaultAsync<UserModel>("delete_user_by_email", parameters, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
-                    user = new UserModel
-                    {
-                        Email = parameters.Get<string>("out_email"),
-                        Birthday = parameters.Get<DateTime>("out_birthday"),
-                        Username = parameters.Get<string>("out_username"),
-                        Role = parameters.Get<string>("out_role"),
-                        Id = parameters.Get<Guid>("out_user_id"),
-                        PasswordKey = parameters.Get<string>("out_password_key"),
-                        Password = parameters.Get<string>("out_password"),
-                        CreatedAt = parameters.Get<DateTimeOffset?>("out_created_at") // Nullable DateTime
-                    };
+                    userFound = await dbConnection.ExecuteAsync("delete_user_by_email", parameters, commandType: CommandType.StoredProcedure).ConfigureAwait(false);
                 }
-                ArgumentNullException.ThrowIfNull(user);
-                _logger.LogWarning($"User successfully deleted: {user.Email}");
-                return user;
+                if (!parameters.Get<bool>("out_is_deleted"))
+                    throw new UserNotFoundException();
+                _logger.LogWarning("User successfully deleted: {UserEmail}", userEmail);
             }
             catch (ArgumentNullException ex)
             {
@@ -72,7 +55,7 @@ namespace Gateway.Infrastructure.UserRepository
         {
             IDbConnection dbConnection = await GetConnection().ConfigureAwait(false);
             DynamicParameters parameters = new();
-            var query = @"SELECT *, created_at AS ""CreatedAt"" FROM function_get_user_by_email(@in_email);";
+            var query = @"SELECT *, created_at AS ""CreatedAt"",password_key AS ""PasswordKey"" FROM function_get_user_by_email(@in_email);";
             parameters.Add("in_email", email, dbType: DbType.String, direction: ParameterDirection.Input);
             try
             {
@@ -158,7 +141,6 @@ namespace Gateway.Infrastructure.UserRepository
             }
             return;
         }
-
         private async Task<IDbConnection> GetConnection()
         {
             IDbConnection dbConnection;

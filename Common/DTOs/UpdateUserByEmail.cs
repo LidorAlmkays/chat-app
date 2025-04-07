@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.DTOs
 {
-    public class RequestUpdateUserByEmailDTO
+    public record RequestUpdateUserByEmailDTO
     {
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
@@ -30,7 +30,7 @@ namespace Common.DTOs
         public string? Role { get; set; }
     }
 
-    public class ResponseUpdateUserByEmailDTO
+    public record ResponseUpdateUserByEmailDTO
     {
 
     }

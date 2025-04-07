@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <ProjectReference Include="..\Gateway.Domain\Gateway.Domain.csproj" />
     <ProjectReference Include="..\Gateway.Infrastructure\Gateway.Infrastructure.csproj" />
   </ItemGroup>

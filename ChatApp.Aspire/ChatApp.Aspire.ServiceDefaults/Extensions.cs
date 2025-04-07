@@ -49,7 +49,7 @@ public static class Extensions
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder, string[] metricNames)
     {
         ArgumentNullException.ThrowIfNull(builder);
-        string? serviceName = builder.Configuration["service-name"];
+        string? serviceName = builder.Configuration["Service-name"];
         ArgumentNullException.ThrowIfNull(serviceName);
 
         builder.Logging.AddOpenTelemetry(logging =>

@@ -55,7 +55,7 @@ namespace Gateway.Infrastructure.UserRepository
         /// <exception cref="Exception">
         /// Thrown for any unexpected errors that occur during the deletion process.
         /// </exception>
-        Task<UserModel> DeleteUserByEmailAsync(string userEmail);
+        Task DeleteUserByEmailAsync(string userEmail);
         /// <summary>
         /// Retrieves a user by their email address.
         /// </summary>
